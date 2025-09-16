@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
-import CssBaseline from '@mui/material/CssBaseline';
 import Divider from '@mui/material/Divider';
 import Drawer from '@mui/material/Drawer';
 import IconButton from '@mui/material/IconButton';
@@ -10,22 +9,34 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import MenuIcon from '@mui/icons-material/Menu';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Dashboard from '@mui/icons-material/Dashboard';
 import Dataset from '@mui/icons-material/Dataset';
 import Input from '@mui/icons-material/Input';
-import { Collapse } from '@mui/material';
+import Collapse from '@mui/material/Collapse';
+import ExpandMore from '@mui/icons-material/ExpandMore';
+import ExpandLess from '@mui/icons-material/ExpandLess';
+import Payments from '@mui/icons-material/Payments';
+import PointOfSale from '@mui/icons-material/PointOfSale';
+import Redeem from '@mui/icons-material/Redeem';
+import Sell from '@mui/icons-material/Sell';
+import { useNavigate } from 'react-router-dom';
+import Menu from '@mui/icons-material/Menu';
 
-const drawerWidth = 240;
+type SidebarProps = {
+  drawerWidth: number
+}
 
-export default function Sidebar() {
+export default function Sidebar({ drawerWidth }: SidebarProps) {
+
   const [mobileOpen, setMobileOpen] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
 
   const [inputOpen, setInputOpen] = useState(false)
   const [dataOpen, setDataOpen] = useState(false)
+
+  const navigate = useNavigate()
 
   const handleDrawerClose = () => {
     setIsClosing(true);
@@ -48,7 +59,7 @@ export default function Sidebar() {
       <Divider />
       <List>
         <ListItem disablePadding>
-          <ListItemButton>
+          <ListItemButton onClick={() => navigate("/dashboard")}>
             <ListItemIcon>
               <Dashboard />
             </ListItemIcon>
@@ -56,20 +67,77 @@ export default function Sidebar() {
           </ListItemButton>
         </ListItem>
         <ListItem disablePadding>
-          <ListItemButton>
+          <ListItemButton onClick={() => setInputOpen(!inputOpen)}>
             <ListItemIcon>
               <Input />
             </ListItemIcon>
             <ListItemText primary={"Input"} />
+            {inputOpen ? <ExpandLess /> : <ExpandMore />}
           </ListItemButton>
         </ListItem>
-        {/* <Collapse in={inputOpen} */}
+        <Collapse in={inputOpen} timeout={"auto"} unmountOnExit>
+          <List component={"div"} disablePadding>
+            <ListItem sx={{ pl: 4 }}>
+              <ListItemButton onClick={() => navigate("/input-pembelian")}>
+                <ListItemIcon>
+                  <Payments />
+                </ListItemIcon>
+                <ListItemText primary={"Pembelian"} />
+              </ListItemButton>
+            </ListItem>
+            <ListItem sx={{ pl: 4 }}>
+              <ListItemButton onClick={() => navigate("/input-penjualan")}>
+                <ListItemIcon>
+                  <Sell />
+                </ListItemIcon>
+                <ListItemText primary={"Penjualan"} />
+              </ListItemButton>
+            </ListItem>
+          </List>
+        </Collapse>
         <ListItem disablePadding>
-          <ListItemButton>
+          <ListItemButton onClick={() => setDataOpen(!dataOpen)}>
             <ListItemIcon>
               <Dataset />
             </ListItemIcon>
             <ListItemText primary={"Data"} />
+            {dataOpen ? <ExpandLess /> : <ExpandMore />}
+          </ListItemButton>
+        </ListItem>
+        <Collapse in={dataOpen} timeout={"auto"} unmountOnExit>
+          <List component={"div"} disablePadding>
+            <ListItem sx={{ pl: 4 }}>
+              <ListItemButton onClick={() => navigate("/data-pembelian")}>
+                <ListItemIcon>
+                  <Payments />
+                </ListItemIcon>
+                <ListItemText primary={"Pembelian"} />
+              </ListItemButton>
+            </ListItem>
+            <ListItem sx={{ pl: 4 }}>
+              <ListItemButton onClick={() => navigate("/data-penjualan")}>
+                <ListItemIcon>
+                  <Sell />
+                </ListItemIcon>
+                <ListItemText primary={"Penjualan"} />
+              </ListItemButton>
+            </ListItem>
+            <ListItem sx={{ pl: 4 }}>
+              <ListItemButton onClick={() => navigate("/data-laba-rugi")}>
+                <ListItemIcon>
+                  <PointOfSale />
+                </ListItemIcon>
+                <ListItemText primary={"Laba/Rugi"} />
+              </ListItemButton>
+            </ListItem>
+          </List>
+        </Collapse>
+        <ListItem disablePadding>
+          <ListItemButton onClick={() => navigate("/bonus")}>
+            <ListItemIcon>
+              <Redeem />
+            </ListItemIcon>
+            <ListItemText primary={"Bonus"} />
           </ListItemButton>
         </ListItem>
       </List>
@@ -77,8 +145,7 @@ export default function Sidebar() {
   );
 
   return (
-    <Box sx={{ display: 'flex' }}>
-      <CssBaseline />
+    <>
       <AppBar
         position="fixed"
         sx={{
@@ -94,13 +161,14 @@ export default function Sidebar() {
             onClick={handleDrawerToggle}
             sx={{ mr: 2, display: { sm: 'none' } }}
           >
-            <MenuIcon />
+            <Menu />
           </IconButton>
           <Typography variant="h6" noWrap component="div">
             Responsive drawer
           </Typography>
         </Toolbar>
       </AppBar>
+
       <Box
         component="nav"
         sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
@@ -135,40 +203,7 @@ export default function Sidebar() {
           {drawer}
         </Drawer>
       </Box>
-      <Box
-        component="main"
-        sx={{ flexGrow: 1, p: 3, width: { sm: `calc(100% - ${drawerWidth}px)` } }}
-      >
-        <Toolbar />
-        <Typography sx={{ marginBottom: 2 }}>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-          tempor incididunt ut labore et dolore magna aliqua. Rhoncus dolor purus non
-          enim praesent elementum facilisis leo vel. Risus at ultrices mi tempus
-          imperdiet. Semper risus in hendrerit gravida rutrum quisque non tellus.
-          Convallis convallis tellus id interdum velit laoreet id donec ultrices.
-          Odio morbi quis commodo odio aenean sed adipiscing. Amet nisl suscipit
-          adipiscing bibendum est ultricies integer quis. Cursus euismod quis viverra
-          nibh cras. Metus vulputate eu scelerisque felis imperdiet proin fermentum
-          leo. Mauris commodo quis imperdiet massa tincidunt. Cras tincidunt lobortis
-          feugiat vivamus at augue. At augue eget arcu dictum varius duis at
-          consectetur lorem. Velit sed ullamcorper morbi tincidunt. Lorem donec massa
-          sapien faucibus et molestie ac.
-        </Typography>
-        <Typography sx={{ marginBottom: 2 }}>
-          Consequat mauris nunc congue nisi vitae suscipit. Fringilla est ullamcorper
-          eget nulla facilisi etiam dignissim diam. Pulvinar elementum integer enim
-          neque volutpat ac tincidunt. Ornare suspendisse sed nisi lacus sed viverra
-          tellus. Purus sit amet volutpat consequat mauris. Elementum eu facilisis
-          sed odio morbi. Euismod lacinia at quis risus sed vulputate odio. Morbi
-          tincidunt ornare massa eget egestas purus viverra accumsan in. In hendrerit
-          gravida rutrum quisque non tellus orci ac. Pellentesque nec nam aliquam sem
-          et tortor. Habitant morbi tristique senectus et. Adipiscing elit duis
-          tristique sollicitudin nibh sit. Ornare aenean euismod elementum nisi quis
-          eleifend. Commodo viverra maecenas accumsan lacus vel facilisis. Nulla
-          posuere sollicitudin aliquam ultrices sagittis orci a.
-        </Typography>
-      </Box>
-    </Box>
+    </>
   );
 }
 
